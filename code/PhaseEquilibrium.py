@@ -8,6 +8,14 @@ class PhaseEquilibrium:
         else:
             print('Сумма компонентов равна 100')
         
+    
+    def calc_flash(p, t):
+        pass
+
+    
+        
+
+
 
 if __name__ == '__main__':
     pe = PhaseEquilibrium({'C1': 25, 'C2': 25, 'C3':50})
