@@ -52,7 +52,7 @@ class DefineCompositionModelWindow:
             dpg.add_combo(label='Shift data', tag = 'define_shift_combo',
                           items=['basic', 'user'],  default_value= 'basic')
             
-            dpg.add_button(label='Define compositional model')
+            dpg.add_button(label='Define compositional model', callback= lambda: dpg.delete_item('define_comp_model'))
 
 
 class CompositionWindow:

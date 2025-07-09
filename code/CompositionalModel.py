@@ -78,9 +78,10 @@ class CompositionalModel:
 
 
 if __name__ == '__main__':
-    comp_model = CompositionalModel({'C1': 0.6, 'C6': 0.4}, 50, 80)
+    comp_model = CompositionalModel({'C1': 0.75, 'nC4': 0.05, 'C6': 0.2}, 15, 100)
+    
     print(comp_model.phase_stability.stable)
-    print(comp_model.fluid_properties.liquid_density)
+
 
 
     
