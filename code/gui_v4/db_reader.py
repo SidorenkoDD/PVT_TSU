@@ -1,55 +1,41 @@
-# db_reader.py
-import yaml
+import dearpygui.dearpygui as dpg
 import json
-import os
 from pathlib import Path
+import os
 
 class DBReader:
-    def __init__(self, db_path="code/db.yaml"):
-        self.db_path = Path(db_path)
-        
+    def __init__(self, db_path=None):
+        if db_path is None:
+            # Автоматическое определение пути к db.json
+            current_dir = Path(os.path.dirname(os.path.abspath(__file__)))
+            self.db_path = current_dir / "db.json"
+        else:
+            self.db_path = Path(db_path)
+        print(f"Using DB at: {self.db_path.absolute()}")
+
     def get_keys(self):
+        """Возвращает ключи верхнего уровня из JSON"""
         if not self.db_path.exists():
+            print(f"DB file not found: {self.db_path}")
             return []
             
-        with self.db_path.open('r') as f:
-            data = yaml.safe_load(f) or {}
-        return list(data.keys())
-    
+        try:
+            with self.db_path.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                return list(data.keys())
+        except Exception as e:
+            print(f"Error reading DB: {e}")
+            return []
+
     def get_data(self, key: str):
+        """Возвращает данные по выбранному ключу"""
         if not self.db_path.exists():
             return {}
             
-        with self.db_path.open('r') as f:
-            data = yaml.safe_load(f) or {}
-        return data.get(key, {})
-    
-    def connect_to_db(self):
-        cur_dir = os.path.dirname(os.path.abspath(__file__))
-        parent_dir = os.path.dirname(cur_dir)
-        target_folder = "db"
-        target_path = os.path.join(parent_dir, target_folder)
-
-        if os.path.exists(target_path) and os.path.isdir(target_path):
-            print(f"✅ Папка '{target_folder}' найдена по пути: {target_path}")
-            with os.scandir(target_path) as entries:
-                folder_contents = {}
-                with os.scandir(target_path) as entries:
-                    for entry in entries:
-                        if entry.is_dir():
-                            folder_contents[entry.name] = [
-                                item.name for item in os.scandir(entry.path)
-                            ]
-                print(folder_contents)
-        else:
-            print(f"❌ Папка '{target_folder}' отсутствует в директории: {parent_dir}")
-        
-    def read_json_db(self):
-        with open('code/db.json', 'r') as json_file:
-            db_json = json.load(json_file)
-            print(db_json.keys())
-
-
-if __name__ == '__main__':
-    dbr = DBReader()
-    dbr.read_json_db()
+        try:
+            with self.db_path.open('r', encoding='utf-8') as f:
+                data = json.load(f)
+                return data.get(key, {})
+        except Exception as e:
+            print(f"Error reading DB: {e}")
+            return {}
