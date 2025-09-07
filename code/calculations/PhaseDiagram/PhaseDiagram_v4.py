@@ -31,7 +31,7 @@ class SaturationPressure:
         phase_stability = TwoPhaseStabilityTest(self.zi, p, self.temp, eos)
         phase_stability.calculate_phase_stability()
 
-        if (phase_stability.S_l - 1) < 10 ** -5 and (phase_stability.S_v) < 10 ** -5:
+        if (phase_stability.S_l - 1) < 10 ** -7 and (phase_stability.S_v) < 10 ** -7:
             y_sp = {component: 0 for component in self.zi._composition.keys()}
             return {'s_sp': 0, 'y_sp': y_sp, 'k_sp': None, 'r_sp': None, 
                     'letuch_sp': None, 'letuch_z': None}
@@ -259,8 +259,8 @@ class PhaseDiagram:
         dew_points = np.array(dew_points)
         
         # Рисуем кривые, пропуская np.nan значения
-        plt.plot(temps, bubble_points, 'b-', label='Bubble Point')
-        plt.plot(temps, dew_points, 'r-', label='Dew Point')
+        plt.plot(temps, bubble_points, 'b-', label='Upper Bound')
+        plt.plot(temps, dew_points, 'r-', label='Lower Bound')
         
         # Отмечаем точки
         plt.scatter(temps, bubble_points, c='blue', marker='o')
